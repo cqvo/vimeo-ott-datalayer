@@ -10,6 +10,10 @@ on:
       - 'vimeo-ott-datalayer.js'
   workflow_dispatch:  # Allows manual triggering
 
+# Add this permissions block to grant write access
+permissions:
+  contents: write
+
 jobs:
   minify:
     runs-on: ubuntu-latest
@@ -22,7 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # Removed the cache option that was causing the error
           
       - name: Install dependencies
         run: npm install terser --no-save
