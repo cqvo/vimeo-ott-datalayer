@@ -1,22 +1,25 @@
 name: Minify JavaScript
 
 on:
+  workflow_run:
+    workflows: ["TypeScript Compilation"]
+    types:
+      - completed
   push:
     branches: [ main, master ]
     paths:
       - 'vimeo-ott-datalayer.js'
-  pull_request:
-    paths:
-      - 'vimeo-ott-datalayer.js'
+    paths-ignore:
+      - 'vimeo-ott-datalayer.min.js'  # Prevent recursion
   workflow_dispatch:  # Allows manual triggering
 
-# Add this permissions block to grant write access
 permissions:
   contents: write
 
 jobs:
   minify:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name != 'workflow_run' }}
     
     steps:
       - name: Checkout code
