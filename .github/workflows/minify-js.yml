@@ -2,34 +2,34 @@ name: Minify JavaScript
 
 on:
   push:
-    branches: [main, master]
+    branches: [ main, master ]
     paths:
-      - "vimeo-ott-datalayer.js"
+      - 'vimeo-ott-datalayer.js'
   pull_request:
     paths:
-      - "vimeo-ott-datalayer.js"
-  workflow_dispatch: # Allows manual triggering
+      - 'vimeo-ott-datalayer.js'
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   minify:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
-
+          node-version: '20'
+          # Removed the cache option that was causing the error
+          
       - name: Install dependencies
         run: npm install terser --no-save
-
+        
       - name: Minify JavaScript
         run: npx terser vimeo-ott-datalayer.js --compress --mangle --output vimeo-ott-datalayer.min.js
-
+        
       - name: Add file size comments
         run: |
           ORIGINAL_SIZE=$(wc -c < vimeo-ott-datalayer.js)
@@ -38,7 +38,7 @@ jobs:
           echo "/* Original: ${ORIGINAL_SIZE} bytes, Minified: ${MINIFIED_SIZE} bytes, Saved: ${SAVINGS}% */" > temp.js
           cat vimeo-ott-datalayer.min.js >> temp.js
           mv temp.js vimeo-ott-datalayer.min.js
-
+        
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
