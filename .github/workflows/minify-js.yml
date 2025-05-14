@@ -6,9 +6,9 @@ on:
     types:
       - completed
   push:
-    branches: [ main, master ]
+    branches: [ '**' ]
     paths:
-      - 'vimeo-ott-datalayer.js'
+      - 'dist/vimeo-ott-datalayer.js'
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
@@ -32,20 +32,20 @@ jobs:
         run: npm install terser --no-save
         
       - name: Minify JavaScript
-        run: npx terser vimeo-ott-datalayer.js --compress --mangle --output vimeo-ott-datalayer.min.js
+        run: npx terser dist/vimeo-ott-datalayer.js --compress --mangle --output dist/vimeo-ott-datalayer.min.js
         
       - name: Add file size comments
         run: |
-          ORIGINAL_SIZE=$(wc -c < vimeo-ott-datalayer.js)
-          MINIFIED_SIZE=$(wc -c < vimeo-ott-datalayer.min.js)
+          ORIGINAL_SIZE=$(wc -c < dist/vimeo-ott-datalayer.js)
+          MINIFIED_SIZE=$(wc -c < dist/vimeo-ott-datalayer.min.js)
           SAVINGS=$(echo "scale=2; (($ORIGINAL_SIZE-$MINIFIED_SIZE)/$ORIGINAL_SIZE)*100" | bc)
           echo "/* Original: ${ORIGINAL_SIZE} bytes, Minified: ${MINIFIED_SIZE} bytes, Saved: ${SAVINGS}% */" > temp.js
-          cat vimeo-ott-datalayer.min.js >> temp.js
-          mv temp.js vimeo-ott-datalayer.min.js
+          cat dist/vimeo-ott-datalayer.min.js >> temp.js
+          mv temp.js dist/vimeo-ott-datalayer.min.js
         
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add vimeo-ott-datalayer.min.js
+          git add dist/vimeo-ott-datalayer.min.js
           git diff --quiet && git diff --staged --quiet || (git commit -m "Minify vimeo-ott-datalayer.js [automated]" && git push)

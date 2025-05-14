@@ -57,6 +57,8 @@ interface Window {
   // Ensure dataLayer exists
   window.dataLayer = window.dataLayer || [];
 
+  console.log('[vimeo-ott-datalayer] script loaded');
+
   function loadPlayerScript(): Promise<void> {
     return new Promise((resolve) => {
       if (typeof window.VHX !== 'undefined') {
@@ -103,8 +105,8 @@ interface Window {
   }
 
   function getMilestones(player: VHXPlayer, milestonePcts: number[] = milestones): MilestoneMap {
-    const duration: number = player.getVideoDuration();
     return milestonePcts.reduce((acc: MilestoneMap, pct: number) => {
+      const duration: number = player.getVideoDuration();
       const percentKey: string = String(Math.round(pct * 100));
       acc[percentKey] = {
         pct: percentKey,
@@ -141,7 +143,9 @@ interface Window {
       player._src = embed.getAttribute('src') || '';
       player._hasStarted = false;
       player._hasFinished = false;
-      player._milestones = getMilestones(player, milestones);
+      player.on('loadedmetadata', () => {
+        player._milestones = getMilestones(player, milestones);
+      });
       return player;
     });
     
@@ -154,11 +158,12 @@ interface Window {
       
       player.on('timeupdate', (_event: any, current: number | undefined) => {
         if (!player._milestones || current === undefined) return;
-        
+        console.log('[vimeo-ott-datalayer] timeupdate', { current, milestones: player._milestones });
         Object.values(player._milestones).forEach((milestone: Milestone) => {
           if (milestone.reached) return;
           if (current > milestone.time) {
             milestone.reached = true;
+            console.log('[vimeo-ott-datalayer] ott_video_progress', { milestone, videoProps: getVideoProps(player, milestone.pct) });
             dlPush('ott_video_progress', getVideoProps(player, milestone.pct));
           }
         });

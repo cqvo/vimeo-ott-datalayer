@@ -10,6 +10,7 @@
     
     /* Output Options */
     "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true,
     
     /* Type Checking */
@@ -22,5 +23,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["vimeo-ott-datalayer.ts"]
+  "include": ["src/vimeo-ott-datalayer.ts"]
 }

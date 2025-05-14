@@ -2,12 +2,12 @@ name: TypeScript Compilation
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ '**' ]
     paths:
-      - 'vimeo-ott-datalayer.ts'
+      - 'src/vimeo-ott-datalayer.ts'
   pull_request:
     paths:
-      - 'vimeo-ott-datalayer.ts'
+      - 'src/vimeo-ott-datalayer.ts'
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
@@ -30,18 +30,18 @@ jobs:
         run: npm install typescript --no-save
           
       - name: Compile TypeScript
-        run: npx tsc
+        run: npx tsc --outDir dist --rootDir src
         
       - name: Add compilation comment
         run: |
           TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
           echo "/* Compiled from TypeScript on ${TIMESTAMP} */" > temp.js
-          cat vimeo-ott-datalayer.js >> temp.js
-          mv temp.js vimeo-ott-datalayer.js
+          cat dist/vimeo-ott-datalayer.js >> temp.js
+          mv temp.js dist/vimeo-ott-datalayer.js
         
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add vimeo-ott-datalayer.js
+          git add dist/vimeo-ott-datalayer.js
           git diff --quiet && git diff --staged --quiet || (git commit -m "Compile vimeo-ott-datalayer.ts to JS [automated]" && git push)
