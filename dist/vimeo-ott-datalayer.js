@@ -1,4 +1,4 @@
-/* Compiled from TypeScript on 2025-05-14 20:28:29 */
+/* Compiled from TypeScript on 2025-05-14 21:13:23 */
 "use strict";
 (function () {
     const playerJsUrl = 'https://cdn.vhx.tv/assets/player.js';
@@ -79,9 +79,17 @@
             player._src = embed.getAttribute('src') || '';
             player._hasStarted = false;
             player._hasFinished = false;
-            player.on('loadedmetadata', () => {
-                player._milestones = getMilestones(player, milestones);
-            });
+            // Poll for metadata (duration) instead of relying on 'loadedmetadata' event
+            function waitForMetadata() {
+                const duration = player.getVideoDuration();
+                if (duration && duration > 0) {
+                    player._milestones = getMilestones(player, milestones);
+                }
+                else {
+                    setTimeout(waitForMetadata, 100);
+                }
+            }
+            waitForMetadata();
             return player;
         });
         players.forEach((player) => {
