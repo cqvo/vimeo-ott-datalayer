@@ -152,7 +152,7 @@ interface Window {
         dlPush('ott_video_start', getVideoProps(player));
       });
       
-      player.on('timeupdate', (_event: any, current: number) => {
+      player.on('timeupdate', (_event: any, current: number | undefined) => {
         if (!player._milestones || current === undefined) return;
         
         Object.values(player._milestones).forEach((milestone: Milestone) => {

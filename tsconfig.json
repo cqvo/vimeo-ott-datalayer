@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* Base Options */
-    "target": "es2015", 
-    "lib": ["es2015", "dom", "dom.iterable"],
+    "target": "es2017", 
+    "lib": ["es2017", "dom", "dom.iterable"],
     
     /* Module Settings */
     "module": "none",         // Change from "NodeNext" to "none" for IIFE
