@@ -6,7 +6,7 @@ on:
     types:
       - completed
   push:
-    branches: [ main, master ]
+    branches: [ ** ]
     paths:
       - 'vimeo-ott-datalayer.js'
   workflow_dispatch:  # Allows manual triggering
