@@ -143,7 +143,9 @@ interface Window {
       player._src = embed.getAttribute('src') || '';
       player._hasStarted = false;
       player._hasFinished = false;
-      player._milestones = getMilestones(player, milestones);
+      player.on('loadedmetadata', () => {
+        player._milestones = getMilestones(player, milestones);
+      });
       return player;
     });
     
