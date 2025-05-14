@@ -1,3 +1,4 @@
+/* Compiled from TypeScript on 2025-05-14 20:02:59 */
 "use strict";
 (function () {
     const playerJsUrl = 'https://cdn.vhx.tv/assets/player.js';
