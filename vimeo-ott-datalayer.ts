@@ -1,3 +1,18 @@
+interface Window {
+  dataLayer: any[];
+  VHX?: {
+    Player: new (id: string) => {
+      on(event: string, callback: (event?: any, current?: number) => void): void;
+      currentTime(): number;
+      getVideoDuration(): number;
+      _src?: string;
+      _hasStarted?: boolean;
+      _hasFinished?: boolean;
+      _milestones?: {[key: string]: {pct: string; time: number; reached: boolean}};
+    };
+  }
+}
+
 (function() {
   const playerJsUrl: string = 'https://cdn.vhx.tv/assets/player.js';
   const milestones: number[] = [0.10, 0.25, 0.50, 0.75];
@@ -138,7 +153,7 @@
       });
       
       player.on('timeupdate', (_event: any, current: number) => {
-        if (!player._milestones) return;
+        if (!player._milestones || current === undefined) return;
         
         Object.values(player._milestones).forEach((milestone: Milestone) => {
           if (milestone.reached) return;

@@ -1,27 +1,26 @@
 {
   "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    /* If transpiling with TypeScript: */
-    "module": "NodeNext",
+    /* Base Options */
+    "target": "es2015", 
+    "lib": ["es2015", "dom", "dom.iterable"],
+    
+    /* Module Settings */
+    "module": "none",         // Change from "NodeNext" to "none" for IIFE
+    "moduleResolution": "node",
+    
+    /* Output Options */
     "outDir": "dist",
     "sourceMap": true,
-
-    /* If your code runs in the DOM: */
-    "lib": ["es2022", "dom", "dom.iterable"],
+    
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    
+    /* Other Options */
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["vimeo-ott-datalayer.ts"]
 }
