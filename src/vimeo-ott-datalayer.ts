@@ -105,8 +105,8 @@ interface Window {
   }
 
   function getMilestones(player: VHXPlayer, milestonePcts: number[] = milestones): MilestoneMap {
-    const duration: number = player.getVideoDuration();
     return milestonePcts.reduce((acc: MilestoneMap, pct: number) => {
+      const duration: number = player.getVideoDuration();
       const percentKey: string = String(Math.round(pct * 100));
       acc[percentKey] = {
         pct: percentKey,
