@@ -1,3 +1,4 @@
+/* Compiled from TypeScript on 2025-05-14 19:11:17 */
 (function() {
   const playerJsUrl = 'https://cdn.vhx.tv/assets/player.js';
   const milestones = [0.10, 0.25, 0.50, 0.75];
