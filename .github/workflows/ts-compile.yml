@@ -28,24 +28,6 @@ jobs:
           
       - name: Install dependencies
         run: npm install typescript --no-save
-        
-      - name: Create tsconfig.json
-        run: |
-          cat > tsconfig.json << EOL
-          {
-            "compilerOptions": {
-              "target": "es2015",
-              "module": "es2015",
-              "strict": true,
-              "esModuleInterop": true,
-              "skipLibCheck": true,
-              "forceConsistentCasingInFileNames": true,
-              "outDir": ".",
-              "lib": ["dom", "es2015"]
-            },
-            "include": ["vimeo-ott-datalayer.ts"]
-          }
-          EOL
           
       - name: Compile TypeScript
         run: npx tsc
