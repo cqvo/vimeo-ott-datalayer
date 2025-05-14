@@ -56,18 +56,27 @@
     });
   }
 
+  function isValidVideoData(props: VideoProps): boolean {
+    return props.video_current_time >= 0 && props.video_duration > 0;
+  }
+
   function dlPush(event: string, ...props: any[]): void {
     const payload: {[key: string]: any} = { event };
     for (const prop of props) {
       Object.assign(payload, prop);
     }
-    window.dataLayer.push(payload);
+    const videoProps = props.find(p => 'video_duration' in p) as VideoProps | undefined;
+    if (!videoProps || isValidVideoData(videoProps)) {
+      window.dataLayer.push(payload);
+    } else {
+      console.warn('Attempted to push invalid video data to dataLayer:', videoProps);
+    }
   }
 
   function getVideoProps(player: VHXPlayer, percentValue: string | null = null): VideoProps {
-    const video_current_time: number = Math.round(player.currentTime());
-    const video_duration: number = Math.round(player.getVideoDuration());
-    const video_percent: number | string = percentValue ?? Math.round((video_current_time / video_duration) * 100);
+    const video_current_time: number = Math.round(player.currentTime()) || -1;
+    const video_duration: number = Math.round(player.getVideoDuration()) || -1;
+    const video_percent: number | string = percentValue ?? (video_duration > 0 ? Math.round((video_current_time / video_duration) * 100) : -1);
     const video_url: string = player._src || '';
     
     return {
@@ -78,7 +87,7 @@
     };
   }
 
-  function getMilestones(player: VHXPlayer, milestonePcts: number[] = [0.10, 0.25, 0.50, 0.75]): MilestoneMap {
+  function getMilestones(player: VHXPlayer, milestonePcts: number[] = milestones): MilestoneMap {
     const duration: number = player.getVideoDuration();
     return milestonePcts.reduce((acc: MilestoneMap, pct: number) => {
       const percentKey: string = String(Math.round(pct * 100));
@@ -92,6 +101,12 @@
   }
 
   function initPlayers(): void {
+    if (!window.VHX) {
+      console.error('VHX is not loaded, retrying in 500ms');
+      setTimeout(initPlayers, 500);
+      return;
+    }
+
     const iframes: HTMLIFrameElement[] = Array.from(
       document.querySelectorAll<HTMLIFrameElement>('iframe[src*="embed.vhx.tv"]')
     );
