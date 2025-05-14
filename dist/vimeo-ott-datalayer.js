@@ -1,4 +1,4 @@
-/* Compiled from TypeScript on 2025-05-14 20:06:30 */
+/* Compiled from TypeScript on 2025-05-14 20:18:27 */
 "use strict";
 (function () {
     const playerJsUrl = 'https://cdn.vhx.tv/assets/player.js';
@@ -79,7 +79,9 @@
             player._src = embed.getAttribute('src') || '';
             player._hasStarted = false;
             player._hasFinished = false;
-            player._milestones = getMilestones(player, milestones);
+            player.on('loadedmetadata', () => {
+                player._milestones = getMilestones(player, milestones);
+            });
             return player;
         });
         players.forEach((player) => {
