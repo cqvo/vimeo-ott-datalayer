@@ -9,8 +9,6 @@ on:
     branches: [ main, master ]
     paths:
       - 'vimeo-ott-datalayer.js'
-    paths-ignore:
-      - 'vimeo-ott-datalayer.min.js'  # Prevent recursion
   workflow_dispatch:  # Allows manual triggering
 
 permissions:
