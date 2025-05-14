@@ -1,4 +1,4 @@
-/* Compiled from TypeScript on 2025-05-14 20:02:59 */
+/* Compiled from TypeScript on 2025-05-14 20:06:30 */
 "use strict";
 (function () {
     const playerJsUrl = 'https://cdn.vhx.tv/assets/player.js';
@@ -47,8 +47,8 @@
         };
     }
     function getMilestones(player, milestonePcts = milestones) {
-        const duration = player.getVideoDuration();
         return milestonePcts.reduce((acc, pct) => {
+            const duration = player.getVideoDuration();
             const percentKey = String(Math.round(pct * 100));
             acc[percentKey] = {
                 pct: percentKey,
